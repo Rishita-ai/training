@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prediction App</title>
+</head>
+<body>
+  <h1>Predictor</h1>
+  <form action="/predict" method="post">
+    <label for="value">Enter a value:</label>
+    <input type="text" id="value" name="value">
+    <button type="submit">Predict</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    document.querySelector('form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const response = await fetch('/predict', {
+        method: 'POST',
+        body: formData
+      });
+      const result = await response.json();
+      document.getElementById('result').textContent = result.prediction !== undefined
+        ? `Prediction: ${result.prediction}`
+        : `Error: ${result.error}`;
+    });
+  </script>
+</body>
+</html>
